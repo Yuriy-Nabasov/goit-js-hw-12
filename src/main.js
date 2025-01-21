@@ -22,60 +22,60 @@ let lightbox = new SimpleLightbox('.gallery a', {
   overlayOpacity: 0.8, // Прозорість фону
 });
 
-const onSearchFormSubmit = event => {
-  event.preventDefault();
+const onSearchFormSubmit = async event => {
+  try {
+    event.preventDefault();
 
-  const searchedQuery = event.currentTarget.elements.user_query.value.trim();
+    const searchedQuery = event.currentTarget.elements.user_query.value.trim();
 
-  if (searchedQuery === '') {
-    iziToast.error({
-      title: 'Error',
-      message: `❌ Поле має бути заповнено!`,
-      position: 'topRight',
-    });
-
-    return;
-  }
-
-  galleryEl.innerHTML = ''; // Очищуємо галерею
-  loaderEl.style.display = 'block'; // Показуємо індикатор завантаження
-
-  fetchPhotoByQuery(searchedQuery)
-    .then(data => {
-      loaderEl.style.display = 'none'; // Ховаємо індикатор завантаження
-
-      if (data.hits.length === 0) {
-        iziToast.error({
-          title: 'Error',
-          message: `❌ Sorry, there are no images matching your search query. Please try again!`,
-          position: 'topRight',
-        });
-
-        // galleryEl.innerHTML = '';
-
-        searchFormEl.reset();
-
-        return;
-      }
-
-      const galleryTemplate = data.hits
-        .map(el => createGalleryCardTemplate(el))
-        .join('');
-
-      galleryEl.innerHTML = galleryTemplate;
-
-      lightbox.refresh(); // Оновлюємо SimpleLightbox
-    })
-    .catch(err => {
-      loaderEl.style.display = 'none'; // Ховаємо індикатор завантаження
+    if (searchedQuery === '') {
       iziToast.error({
         title: 'Error',
-        message:
-          '❌ An error occurred while fetching data. Please try again later.',
+        message: `❌ Поле має бути заповнено!`,
         position: 'topRight',
       });
-      console.log(err);
+
+      return;
+    }
+
+    galleryEl.innerHTML = ''; // Очищуємо галерею
+    loaderEl.style.display = 'block'; // Показуємо індикатор завантаження
+
+    const response = await fetchPhotoByQuery(searchedQuery);
+
+    loaderEl.style.display = 'none'; // Ховаємо індикатор завантаження
+
+    if (response.data.hits.length === 0) {
+      iziToast.error({
+        title: 'Error',
+        message: `❌ Sorry, there are no images matching your search query. Please try again!`,
+        position: 'topRight',
+      });
+
+      // galleryEl.innerHTML = '';
+
+      searchFormEl.reset();
+
+      return;
+    }
+
+    const galleryTemplate = response.data.hits
+      .map(el => createGalleryCardTemplate(el))
+      .join('');
+
+    galleryEl.innerHTML = galleryTemplate;
+
+    lightbox.refresh(); // Оновлюємо SimpleLightbox
+  } catch (err) {
+    loaderEl.style.display = 'none'; // Ховаємо індикатор завантаження
+    iziToast.error({
+      title: 'Error',
+      message:
+        '❌ An error occurred while fetching data. Please try again later.',
+      position: 'topRight',
     });
+    console.log(err);
+  }
 };
 
 searchFormEl.addEventListener('submit', onSearchFormSubmit);

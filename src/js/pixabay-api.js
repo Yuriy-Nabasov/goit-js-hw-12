@@ -2,6 +2,10 @@
 
 // Функції для HTTP-запитів
 
+import axios from 'axios';
+
+// ? Реалізація запитів за допомогою бібліотеки Axios та синктаксу async/await
+
 export const fetchPhotoByQuery = searchedQuery => {
   const searchParams = new URLSearchParams({
     key: `48208866-6baf83551ffafce9b15eedbf6`,
@@ -9,13 +13,8 @@ export const fetchPhotoByQuery = searchedQuery => {
     image_type: 'photo',
     orientation: `horizontal`,
     safesearch: `true`,
-    per_page: 30,
+    page: 1,
+    per_page: 15,
   });
-  return fetch(`https://pixabay.com/api/?${searchParams}`).then(response => {
-    if (!response.ok) {
-      throw new Error(response.status);
-    }
-
-    return response.json();
-  });
+  return axios.get(`https://pixabay.com/api/?${searchParams}`);
 };
