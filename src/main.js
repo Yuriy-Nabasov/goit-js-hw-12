@@ -13,8 +13,8 @@ import { fetchPhotoByQuery } from './js/pixabay-api';
 const searchFormEl = document.querySelector('.js-search-form');
 const galleryEl = document.querySelector('.js-gallery');
 const loaderEl = document.querySelector('.js-loader');
-
 const loadMoreBtn = document.querySelector('.js-load-more-btn');
+
 let searchedQuery = ''; // Глобальна змінна для збереження ключового слова
 let page = 1;
 const perPage = 15;
@@ -46,7 +46,7 @@ const onSearchFormSubmit = async event => {
       searchedQuery = inputQuery;
       page = 1; // Скидаємо номер сторінки
       galleryEl.innerHTML = ''; // Очищуємо галерею
-      loadMoreBtn.style.display = 'none'; // Ховаємо кнопку
+      loadMoreBtn.classList.add(`is-hidden`); // Ховаємо кнопку
     }
     loaderEl.style.display = 'block'; // Показуємо індикатор завантаження
 
@@ -72,7 +72,7 @@ const onSearchFormSubmit = async event => {
     });
 
     if (response.data.totalHits > perPage) {
-      loadMoreBtn.style.display = 'block'; // Показуємо кнопку
+      loadMoreBtn.classList.remove(`is-hidden`); // Показуємо кнопку
     }
   } catch (err) {
     loaderEl.style.display = 'none'; // Ховаємо індикатор завантаження
@@ -89,7 +89,7 @@ const onLoadMoreBtnClick = async () => {
   try {
     page += 1; // Збільшуємо номер сторінки
     loaderEl.style.display = 'block'; // Показуємо індикатор завантаження
-    loadMoreBtn.style.display = 'none'; // Тимчасово ховаємо кнопку
+    loadMoreBtn.classList.add(`is-hidden`); // Тимчасово ховаємо кнопку
 
     const response = await fetchPhotoByQuery(searchedQuery, page);
 
@@ -100,7 +100,7 @@ const onLoadMoreBtnClick = async () => {
         message: `We're sorry, but you've reached the end of search results.`,
         position: 'topRight',
       });
-      loadMoreBtn.style.display = 'none'; // Ховаємо кнопку
+      loadMoreBtn.classList.add(`is-hidden`); // Ховаємо кнопку
       return;
     }
 
@@ -112,9 +112,9 @@ const onLoadMoreBtnClick = async () => {
         message: `We're sorry, but you've reached the end of search results.`,
         position: 'topRight',
       });
-      loadMoreBtn.style.display = 'none';
+      loadMoreBtn.classList.add(`is-hidden`);
     } else {
-      loadMoreBtn.style.display = 'block'; // Повертаємо кнопку
+      loadMoreBtn.classList.remove(`is-hidden`); // Повертаємо кнопку
     }
 
     // Прокрутка сторінки
