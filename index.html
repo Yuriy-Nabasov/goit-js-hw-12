@@ -5,6 +5,14 @@
     <link rel="icon" type="image/svg+xml" href="/goit-js-hw-12/assets/favicon-yna-Boy-AzZ5.ico" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>goit-js-hw-12</title>
+    <script src="https://cdn.amplitude.com/libs/analytics-browser-2.11.1-min.js.gz"></script>
+    <script src="https://cdn.amplitude.com/libs/plugin-session-replay-browser-1.8.0-min.js.gz"></script>
+    <script>
+      window.amplitude.add(window.sessionReplay.plugin({ sampleRate: 1 }));
+      window.amplitude.init('e874056119f9b902ee817b618a695317', {
+        autocapture: { elementInteractions: true },
+      });
+    </script>
     <script type="module" crossorigin src="/goit-js-hw-12/index.js"></script>
     <link rel="modulepreload" crossorigin href="/goit-js-hw-12/assets/vendor-B6jJ9_I0.js">
     <link rel="stylesheet" crossorigin href="/goit-js-hw-12/assets/index-Dd5Cqx0q.css">
